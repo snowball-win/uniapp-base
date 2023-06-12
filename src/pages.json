@@ -21,7 +21,10 @@
 		{
 			"path": "pages/my/index",
 			"style": {
-				"navigationBarTitleText": "我的"
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "我的",
+				"navigationBarBackgroundColor": "#ff0000",
+				"backgroundColor": "#4d84ff"
 			}
 		}
 	],
