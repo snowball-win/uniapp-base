@@ -14,8 +14,8 @@
                 <video
                     id="myVideo"
                     controls
-                    :class="item.direction"
-                    :src="item.url"
+                    :class="(item as videoItem).direction"
+                    :src="(item as videoItem).url"
                     :show-fullscreen-btn="true"
                     :enable-play-gesture="true"
                     :enable-progress-gesture="true"
@@ -26,13 +26,13 @@
                     @error="videoErrorCallback"
                 >
                 </video>
-                <view class="operate">点赞</view>
-                <view class="collect">收藏</view>
+                <view class="like" @click="onLike">{{ (item as videoItem).like? '已赞' : '点赞' }}</view>
+                <view class="collect" @click="onCollect(item)">收藏</view>
+                <view class="author">{{ (item as videoItem).author }}</view>
+                <view class="title">{{ (item as videoItem).title }}</view>
             </swiper-item>
         </swiper>
     </view>
-    <!-- <button @click="apiTest">调用代理接口</button> -->
-    <!-- <view>{{ title }}</view> -->
 </template>
 
 <script setup lang="ts">
@@ -43,27 +43,51 @@ import { useStore } from 'vuex'
 interface videoItem {
     url ?: string;
     direction ?: string;
+    author? : string;
+    title? : string;
+    like? : boolean;
+    collect? : boolean;
 }
 let videoList: videoItem []  = [
     {
         url: 'https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4',
-        direction: 'Horizontal' // Horizontal 横向 vertical 竖向
+        direction: 'Horizontal', // Horizontal 横向 vertical 竖向
+        author: 'snow',
+        title: 'title',
+        like: true,
+        collect: true,
     },
     {
         url: 'https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4',
-        direction: 'vertical'
+        direction: 'vertical',
+        author: 'snow',
+        title: 'title',
+        like: true,
+        collect: true,
     },
     {
         url: 'https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4',
-        direction: 'Horizontal'
+        direction: 'Horizontal',
+        author: 'snow',
+        title: 'title',
+        like: true,
+        collect: true,
     },
     {
         url: 'https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4',
-        direction: 'vertical'
+        direction: 'vertical',
+        author: 'snow',
+        title: 'title',
+        like: true,
+        collect: true,
     },
     {
         url: 'https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4',
-        direction: 'Horizontal'
+        direction: 'Horizontal',
+        author: 'snow',
+        title: 'title',
+        like: true,
+        collect: true,
     }
 ]
 
@@ -96,10 +120,13 @@ const touchEnd = (res: any) => {
     touchEndPageY = res.changedTouches[0].pageY
 }
 
-const apiTest = () => {
+const onLike = () => {
     request.post('/UcAuthCompany/getName').then((res: any) => {
         console.log(res)
     })
+}
+const onCollect = (item:any):void => {
+    console.log(item);
 }
 uni.setTabBarBadge({ //显示数字  
 	index: 1, //tabbar下标
@@ -127,7 +154,7 @@ uni.setTabBarBadge({ //显示数字
                 width: 100%;
                 height: 200px;
             }
-            .operate{
+            .like{
                 position: absolute;
                 bottom: 100px;
                 right: 10px;
@@ -138,6 +165,20 @@ uni.setTabBarBadge({ //显示数字
                 position: absolute;
                 bottom: 50px;
                 right: 10px;
+                color: #ff0000;
+                font-size: 18px;
+            }
+            .author{
+                position: absolute;
+                bottom: 80px;
+                left: 10px;
+                color: #ff0000;
+                font-size: 18px;
+            }
+            .title{
+                position: absolute;
+                bottom: 50px;
+                left: 10px;
                 color: #ff0000;
                 font-size: 18px;
             }
