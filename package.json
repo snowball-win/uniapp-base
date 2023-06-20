@@ -72,6 +72,7 @@
     "@dcloudio/uni-cli-shared": "3.0.0-alpha-3080520230616001",
     "@dcloudio/uni-stacktracey": "3.0.0-alpha-3080520230616001",
     "@dcloudio/vite-plugin-uni": "3.0.0-alpha-3080520230616001",
+    "@types/mockjs": "^1.0.7",
     "@types/wechat-miniprogram": "^3.4.1",
     "@typescript-eslint/eslint-plugin": "^5.59.11",
     "@typescript-eslint/parser": "^5.59.11",
