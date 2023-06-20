@@ -8,7 +8,6 @@
 <script setup lang="ts">
 const wxscreen = () => {
     wx.onUserCaptureScreen(function (){
-        // flag.value = true
         console.log("用户截屏了");
     })
 }

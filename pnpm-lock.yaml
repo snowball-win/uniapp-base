@@ -85,6 +85,9 @@ devDependencies:
   '@dcloudio/vite-plugin-uni':
     specifier: 3.0.0-alpha-3080520230616001
     version: 3.0.0-alpha-3080520230616001(postcss@8.4.24)(vite@4.0.3)(vue@3.2.45)
+  '@types/wechat-miniprogram':
+    specifier: ^3.4.1
+    version: 3.4.1
   '@typescript-eslint/eslint-plugin':
     specifier: ^5.59.11
     version: 5.59.11(@typescript-eslint/parser@5.59.11)(eslint@8.2.0)(typescript@4.9.4)
@@ -3261,6 +3264,10 @@ packages:
       '@types/node': 20.2.5
       '@types/unist': 2.0.6
       '@types/vfile-message': 2.0.0
+    dev: true
+
+  /@types/wechat-miniprogram@3.4.1:
+    resolution: {integrity: sha512-szbuYR32VotxNQNQ4YyQ6Ob3ya0tLY0zpf/xvi6DF8Oqb+0Y+5CL5BpxS+4wBSJvlu3VfSXhjxZ0ze1a3l16Pw==}
     dev: true
 
   /@types/yargs-parser@21.0.0:
