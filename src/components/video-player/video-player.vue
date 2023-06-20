@@ -25,8 +25,12 @@
                     object-fit="cover"
                     @error="videoErrorCallback"
                 ></video>
-                <view class="like" @click="onLike">{{ item.like ? '已赞' : '点赞' }}</view>
-                <view class="collect" @click="onCollect(item, index)">收藏</view>
+                <view class="like" @click="onLike(item)">{{
+                    item.like ? '已赞' : '点赞'
+                }}</view>
+                <view class="collect" @click="onCollect(item, index)">{{
+                    item.collect ? '收藏' : '已藏'
+                }}</view>
                 <view class="author">{{ item.author }}</view>
                 <view class="title">{{ item.title }}</view>
             </swiper-item>
@@ -47,7 +51,7 @@ interface videoItem {
     like?: boolean
     collect?: boolean
 }
-const videoList: videoItem[] = reactive([
+let videoList: videoItem[] = reactive([
     {
         url: 'https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4',
         direction: 'Horizontal', // Horizontal 横向 vertical 竖向
@@ -119,10 +123,11 @@ const touchEnd = (res: any) => {
     touchEndPageY = res.changedTouches[0].pageY
 }
 
-const onLike = () => {
-    request.post('/UcAuthCompany/getName').then((res: any) => {
-        console.log(res)
-    })
+const onLike = (item: videoItem) => {
+    item.like = !item.like
+    // request.post('/UcAuthCompany/getName').then((res: any) => {
+    //     console.log(res)
+    // })
 }
 const onCollect = (item: any, index: number): void => {
     videoList[index].collect = !videoList[index].collect

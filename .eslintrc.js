@@ -26,10 +26,11 @@ module.exports = {
         }
     },
     globals: {
-        /** 避免uni报错 */
         uni: true,
-        UniApp: true
+        UniApp: true,
+        wx: true
     },
+    files: ['src/pages/index.vue','src/pages/**/index.vue'],   // 匹配views和二级目录中的index.vue
     rules: {
         'prettier/prettier': [
             'error',
@@ -53,6 +54,7 @@ module.exports = {
                 tsx: 'never'
             }
         ],
-        'import/no-extraneous-dependencies': ['error', { devDependencies: true }]
+        'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+        'vue/multi-word-component-names': 'off'
     }
 }

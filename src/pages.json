@@ -13,7 +13,7 @@
 			}
 		},
 		{
-			"path": "pages/message/index",
+			"path": "pages/msg/index",
 			"style": {
 				"navigationBarTitleText": "消息"
 			}
@@ -52,7 +52,7 @@
 				"text": "朋友"
 			},
 			{
-				"pagePath": "pages/message/index",
+				"pagePath": "pages/msg/index",
 				"iconPath": "static/logo.png",
 				"selectedIconPath": "static/logo.png",
 				"text": "消息"
