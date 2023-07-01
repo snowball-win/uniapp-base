@@ -1,5 +1,5 @@
 {
-  "projectname": "uniApp-template",
+  "projectname": "fangniujuchang",
   "setting": {
     "compileHotReLoad": true,
     "urlCheck": false
@@ -9,8 +9,8 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/index/index",
-          "pathName": "pages/index/index",
+          "name": "剧场",
+          "pathName": "pages/theater/index",
           "query": "",
           "launchMode": "default",
           "scene": null

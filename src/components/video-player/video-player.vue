@@ -125,19 +125,19 @@ const touchEnd = (res: any) => {
 
 const onLike = (item: videoItem) => {
     item.like = !item.like
-    // request.post('/UcAuthCompany/getName').then((res: any) => {
-    //     console.log(res)
-    // })
+    request.post('/UcAuthCompany/getName').then((res: any) => {
+        console.log(res)
+    })
 }
 const onCollect = (item: any, index: number): void => {
     videoList[index].collect = !videoList[index].collect
     console.log('131', videoList[index])
 }
-uni.setTabBarBadge({
-    // 显示数字
-    index: 1, // tabbar下标
-    text: '6' // 数字
-})
+// uni.setTabBarBadge({
+//     // 显示数字
+//     index: 1, // tabbar下标
+//     text: '6' // 数字
+// })
 </script>
 
 <style lang="scss">

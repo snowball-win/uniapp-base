@@ -1,21 +1,19 @@
 {
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/index/index",
+			"path": "pages/theater/index",
 			"style": {
-				"navigationBarTitleText": "首页"
+				"navigationBarTitleText": "剧场",
+				"navigationBarBackgroundColor": "#FF7979",
+				"backgroundColor": "#fff"
 			}
 		},
 		{
-			"path": "pages/friends/index",
+			"path": "pages/story/index",
 			"style": {
-				"navigationBarTitleText": "朋友"
-			}
-		},
-		{
-			"path": "pages/msg/index",
-			"style": {
-				"navigationBarTitleText": "消息"
+				"navigationBarTitleText": "微故事",
+				"navigationBarBackgroundColor": "#FF7979",
+				"backgroundColor": "#fff"
 			}
 		},
 		{
@@ -23,16 +21,16 @@
 			"style": {
 				"navigationBarTextStyle": "white",
 				"navigationBarTitleText": "我的",
-				"navigationBarBackgroundColor": "#ff0000",
-				"backgroundColor": "#4d84ff"
+				"navigationBarBackgroundColor": "#FF7979",
+				"backgroundColor": "#fff"
 			}
 		}
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
-		"navigationBarBackgroundColor": "#F8F8F8",
-		"backgroundColor": "#F8F8F8"
+		"navigationBarBackgroundColor": "#FF7979",
+		"backgroundColor": "#999"
 	},
 	"tabBar": {
 		"borderStyle": "black",
@@ -40,28 +38,22 @@
 		"color": "#444444",
 		"list": [
 			{
-				"pagePath": "pages/index/index",
+				"pagePath": "pages/theater/index",
 				"iconPath": "static/logo.png",
 				"selectedIconPath": "static/logo.png",
-				"text": "首页"
+				"text": "剧场"
 			},
 			{
-				"pagePath": "pages/friends/index",
+				"pagePath": "pages/story/index",
 				"iconPath": "static/logo.png",
 				"selectedIconPath": "static/logo.png",
-				"text": "朋友"
-			},
-			{
-				"pagePath": "pages/msg/index",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
-				"text": "消息"
+				"text": "微故事"
 			},
 			{
 				"pagePath": "pages/my/index",
 				"iconPath": "static/logo.png",
 				"selectedIconPath": "static/logo.png",
-				"text": "我"
+				"text": "我的"
 			}
 		]
 	},

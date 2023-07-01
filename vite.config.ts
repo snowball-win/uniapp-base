@@ -29,7 +29,7 @@ export default defineConfig({
         // cors: true, // 允许跨域
         // 请求代理
         proxy: {
-            '/m-staff-center': {
+            '/app-api': {
                 // 匹配请求路径，localhost:3000/m-staff-center，如果只是匹配/那么就访问到网站首页了
                 target: loadEnv(process.argv[process.argv.length - 1], './env').VITE_SERVER_NAME, // 代理的目标地址
                 changeOrigin: true // 开发模式，默认的origin是真实的 origin:localhost:3000 代理服务会把origin修改为目标地址
