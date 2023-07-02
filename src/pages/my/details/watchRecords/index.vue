@@ -1,3 +1,4 @@
+<!-- 观看记录 -->
 <template>
   <view class="my">
     <div class="userInfo">
@@ -7,7 +8,7 @@
       <view @click="setRecharge">充值</view>
     </div>
     <div class="list">
-      <div class="list__Item" v-for="(item, index) in list" :key="index" @click="toDetail(item, index)">
+      <div class="list__Item" v-for="(item, index) in list" :key="index">
         <view class="list__Item__img"></view>
         <view class="list__Item__text">{{ item.title }}</view>
         <view class="list__Item__arrow">></view>
@@ -30,11 +31,6 @@ const list: item[] = reactive([
     path: '',
     icon: '',
     title: '观看记录'
-  },
-  {
-    path: '',
-    icon: '',
-    title: '点赞记录'
   },
   {
     path: '',
@@ -131,15 +127,6 @@ const get333 = () => {
     })
 }
 get333()
-// 去播放页面
-const toDetail = (item: any, index: any) => {
-    console.log('44', item, index)
-    console.log('45', item.filmId)
-    const pathArr = ['watchRecords', 'likeRecords', 'collectRecords', 'rechargeRecords', 'consumptionRecords']
-    uni.navigateTo({
-        url: `./details/${pathArr[index]}/index`
-    })
-}
 </script>
 
 <style lang="scss">

@@ -1,37 +1,46 @@
 <template>
-  <view class="content">
-    <image class="logo" src="@/static/logo.png" />
-    <video-player></video-player>
-    <video-list></video-list>
+  <view class="story">
+    <div class="story__item" v-for="(item, index) in list" :key="index">
+        <div class="story__item__imgwrap"><image :src="item.coverImg" alt="" class="story__item__img" /></div>
+        <div class="story__item__content">
+          <div>{{ item.name }}</div>
+          <div>
+            <span>{{ item.updateStatus }}</span>
+            共{{ item.totalNum }}集
+          </div>
+          <div>
+            简介：{{ item.briefIntroduction }}
+          </div>
+        </div>
+    </div>
   </view>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-const title = ref('Hello')
+import request from '@/utils/request'
+// 最新剧场
+let list: any = ref([])
+const getLatest = () => {
+    request.post('/fnjc/filmMain/getList',{page:1, pageSize: 10}).then((res: any) => {
+        list.value = res.data.content
+    })
+}
+getLatest()
 </script>
 
 <style lang="scss">
-.content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: $bg-color;
+.story {
+  &__item{
+    display: flex;
+    &__imgwrap{
+      width: 220rpx;
+      height: 320rpx;
+      overflow: hidden;
+    }
+    &__img{
+      width: 100%;
+    }
+  }
 }
-
-.logo {
-  height: 200rpx;
-  width: 200rpx;
-  margin-top: 200rpx;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 50rpx;
-}
-
-.text-area {
-  display: flex;
-  justify-content: center;
-}
-
 </style>

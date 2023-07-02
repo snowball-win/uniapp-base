@@ -3,7 +3,15 @@
 		{
 			"path": "pages/theater/index",
 			"style": {
-				"navigationBarTitleText": "剧场",
+				"navigationBarTitleText": "放牛剧场",
+				"navigationBarBackgroundColor": "#FF7979",
+				"backgroundColor": "#fff"
+			}
+		},
+		{
+			"path": "pages/theater/play/index",
+			"style": {
+				"navigationBarTitleText": "播放",
 				"navigationBarBackgroundColor": "#FF7979",
 				"backgroundColor": "#fff"
 			}
@@ -21,6 +29,51 @@
 			"style": {
 				"navigationBarTextStyle": "white",
 				"navigationBarTitleText": "我的",
+				"navigationBarBackgroundColor": "#FF7979",
+				"backgroundColor": "#fff"
+			}
+		},
+		{
+			"path": "pages/my/details/watchRecords/index",
+			"style": {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "观看记录",
+				"navigationBarBackgroundColor": "#FF7979",
+				"backgroundColor": "#fff"
+			}
+		},
+		{
+			"path": "pages/my/details/likeRecords/index",
+			"style": {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "点赞记录",
+				"navigationBarBackgroundColor": "#FF7979",
+				"backgroundColor": "#fff"
+			}
+		},
+		{
+			"path": "pages/my/details/collectRecords/index",
+			"style": {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "收藏记录",
+				"navigationBarBackgroundColor": "#FF7979",
+				"backgroundColor": "#fff"
+			}
+		},
+		{
+			"path": "pages/my/details/rechargeRecords/index",
+			"style": {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "充值记录",
+				"navigationBarBackgroundColor": "#FF7979",
+				"backgroundColor": "#fff"
+			}
+		},
+		{
+			"path": "pages/my/details/consumptionRecords/index",
+			"style": {
+				"navigationBarTextStyle": "white",
+				"navigationBarTitleText": "消费记录",
 				"navigationBarBackgroundColor": "#FF7979",
 				"backgroundColor": "#fff"
 			}
@@ -61,7 +114,9 @@
         "autoscan": true,
         "custom": {
             // uni-ui 规则如下配置
-            "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+            "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue",
+			// f--放牛剧场
+            // "^f-(.*)": "@/fomponents/f-$1/f-$1.vue"
         }
     }
 }

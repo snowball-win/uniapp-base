@@ -3,7 +3,7 @@
         <banner :list="bannerList"></banner>
         <menu-bar></menu-bar>
         <hot-theater :list="hotList"></hot-theater>
-        <latest-theater :list="latest"></latest-theater>
+        <latest-theater :list="latestList"></latest-theater>
     </view>
 </template>
 
@@ -27,15 +27,15 @@ let hotList: any = ref([])
 const getBannerAndHot = () => {
     request.get('/fnjc/banner/getFristPageInfo').then((res: any) => {
         bannerList.value = res.data.bannerManageVoList
-        hotList.value = res.data.bannerManageVoList
+        hotList.value = res.data.filmMainVoList
     })
 }
 getBannerAndHot()
 // 最新剧场
-let latest: any = ref([])
+let latestList: any = ref([])
 const getLatest = () => {
     request.post('/fnjc/filmMain/getList',{page:1, pageSize: 10}).then((res: any) => {
-        latest.value = res.data.content
+        latestList.value = res.data.content
     })
 }
 getLatest()

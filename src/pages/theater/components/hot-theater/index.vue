@@ -1,6 +1,6 @@
 <template>
     <view class="theater-hot-therter">
-        <content-title></content-title>
+        <content-title title="热播剧场"></content-title>
         <swiper
             class="swiper"
             :circular="true"
@@ -9,13 +9,14 @@
             :duration="duration"
             display-multiple-items="2"
             next-margin="50px"
-            @change="changeplay"
-            @touchstart="touchStart"
-            @touchend="touchEnd"
         >
             <swiper-item v-for="(item, index) in list" :key="index" class="swiper-item">
-                <div class="swiper-item__content">
-                    <image :src="item.coverImg" alt="" class="theater-menu-bar__item__img" />
+                <div class="swiper-item__content" @click="toPlayPage(item)">
+                    <image :src="item.coverImg" alt="" class="swiper-item__content__img" />
+                    <div class="swiper-item__content__info">
+                        <view>{{ item.name }}</view>
+                        <view>共{{ item.totalNum }}集</view>
+                    </div>
                 </div>
             </swiper-item>
         </swiper>
@@ -38,23 +39,13 @@ const { list } = toRefs(props)
 const autoplay: boolean = false
 // 滑动动画时长
 const duration: number = 300
-const changeplay = (res: any) => {
-    console.log('34', res)
-    if (touchStartPageY < touchEndPageY) {
-        console.log('向下滑动')
-    } else {
-        console.log('向上滑动')
-    }
-}
-let touchStartPageY: number = 0
-const touchStart = (res: any) => {
-    console.log('37', res)
-    touchStartPageY = res.changedTouches[0].pageY
-}
-let touchEndPageY: number = 0
-const touchEnd = (res: any) => {
-    console.log('40', res)
-    touchEndPageY = res.changedTouches[0].pageY
+// 去播放页面
+const toPlayPage = (item: any) => {
+    console.log('44', item)
+    console.log('45', item.filmId)
+    uni.navigateTo({
+        url: './play/index?filmId=' + item.filmId
+    })
 }
 
 </script>
@@ -69,10 +60,19 @@ const touchEnd = (res: any) => {
                 margin-right: 30rpx;
                 border-radius: 12rpx;
                 border: 1px solid #e6e6e6;
-            }
-            .hot-therter__item__img{
-                width: 20px;
-                height: 20px;
+                position: relative;
+                height: 100%;
+                &__img{
+                    width: 100%;
+                    min-height: 100%;
+                }
+                &__info{
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    background: #ccc;
+                    opacity: 0.5;
+                }
             }
         }
     }

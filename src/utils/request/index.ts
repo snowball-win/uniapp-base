@@ -47,9 +47,10 @@ const request = (config: UniApp.RequestOptions) => {
             header: {
                 ...config.header,
                 /** 统一报文格式 */
-                'Content-Type': 'application/json;charset=UTF-8'
+                'Content-Type': 'application/json;charset=UTF-8',
                 /** 统一身份认证 */
-                // Authorization: Token
+                // Authorization: wx.getStorageSync('token'),
+                sdpToken: wx.getStorageSync('token'),
             },
             success(res) {
                 // 200状态码表示成功

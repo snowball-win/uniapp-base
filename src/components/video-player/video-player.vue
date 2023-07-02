@@ -94,6 +94,14 @@ let videoList: videoItem[] = reactive([
     }
 ])
 
+// 充值挡位
+const getAmountInfoList = () => {
+    request.post('/recharge/grade/list',{}).then((res: any) => {
+        console.log('93', res)
+    })
+}
+getAmountInfoList()
+
 const videoErrorCallback = (e: any) => {
     console.log(e)
 }
