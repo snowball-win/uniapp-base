@@ -1,20 +1,25 @@
 <!-- 消费记录 -->
 <template>
   <view class="my">
-    <div class="userInfo">
-      <!-- <div @click="login">登录</div> -->
-      <!-- <div @click="getUserInfo">获取用户信息</div> -->
-      <button  open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">去登录</button>
-      <view @click="setRecharge">充值</view>
-    </div>
-    <div class="list">
-      <div class="list__Item" v-for="(item, index) in list" :key="index">
-        <view class="list__Item__img"></view>
-        <view class="list__Item__text">{{ item.title }}</view>
-        <view class="list__Item__arrow">></view>
+    <scroll-view 
+      scroll-y="true" 
+      class="scroll-Y" 
+      @scrolltolower="lower" 
+      refresher-enabled="true" 
+      @refresherrefresh="refresher" 
+      :refresher-triggered="triggered" 
+      @refresherrestore="onRestore" 
+      @refresherabort="onAbort"
+    >
+      <div class="list">
+        <div class="list__Item" v-for="(item, index) in 20" :key="index">
+          <view class="list__Item__img"></view>
+          <view class="list__Item__text">{{ item }}</view>
+          <view class="list__Item__arrow">></view>
+        </div>
+        <div>到底部了</div>
       </div>
-    </div>
-    <recharge ref="showRecharge"></recharge>
+    </scroll-view>
   </view>
 </template>
 
@@ -127,12 +132,32 @@ const get333 = () => {
     })
 }
 get333()
+// 滚动到底部
+const lower = () => {
+	console.log('滚动到底部')
+}
+let triggered = false
+// 下拉刷新
+const refresher = () => {
+	console.log('下拉刷新')
+  // triggered = true
+  triggered = false
+}
+// 自定义下拉刷新被复位
+const onRestore = () => {
+	console.log('自定义下拉刷新被复位')
+}
+// 自定义下拉刷新被中止
+const onAbort = () => {
+	console.log('自定义下拉刷新被中止')
+}
 </script>
 
 <style lang="scss">
 .my {
   background-color: $bg-color;
   .list{
+    height: 500px;
     &__Item{
       display: flex;
       border: 1px solid #ccc;

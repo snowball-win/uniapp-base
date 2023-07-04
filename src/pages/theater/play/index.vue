@@ -1,12 +1,12 @@
 <template>
     <view class="my-video-player">
+        <!-- :current="1" -->
         <swiper
             class="swiper"
             :circular="true"
             :vertical="true"
             :autoplay="autoplay"
             :duration="duration"
-            :current="1"
             @change="changeplay"
             @touchstart="touchStart"
             @touchend="touchEnd"
@@ -26,7 +26,7 @@
                     object-fit="cover"
                     @error="videoErrorCallback"
                 ></video>
-                <view class="like" @click="onLike(item)">{{
+                <view class="like" @click="onLike(item, index)">{{
                     item.likeStatus === 1 ? '已赞' : '点赞'
                 }}</view>
                 <view class="collect" @click="onCollect(item)">{{
@@ -56,9 +56,9 @@ onLoad((option: any)=>{
     filmId = option.filmId
     getEpisodesList()
 })
-// 充值
+// 购买
 // const getAmountInfoList = () => {
-//     request.post('/recharge/grade/list',{}).then((res: any) => {
+//     request.post('/consumption/record/consumption',{}).then((res: any) => {
 //         console.log('93', res)
 //     })
 // }
@@ -74,10 +74,17 @@ const autoplay: boolean = false
 const duration: number = 300
 const changeplay = (res: any) => {
     console.log('34', res)
+    const detail = res.detail
     if (touchStartPageY < touchEndPageY) {
         console.log('向下滑动')
+        console.log('81', videoList.value[detail.current + 1].playUrl)
+        // videoList.value[detail.current + 1].playUrl = '' // 清空上一个视频
+        getPlayInfo(videoList.value[detail.current].id, detail.current)
     } else {
         console.log('向上滑动')
+        // videoList.value[detail.current - 1].playUrl = '' // 清空上一个视频
+        console.log('85', videoList.value[detail.current - 1].playUrl)
+        getPlayInfo(videoList.value[detail.current].id, detail.current)
     }
 }
 let touchStartPageY: number = 0
@@ -91,21 +98,23 @@ const touchEnd = (res: any) => {
     touchEndPageY = res.changedTouches[0].pageY
 }
 // 点赞
-const onLike = (item: any) => {
+const onLike = (item: any, index: any) => {
     console.log('139', item)
     let params = {
         filmId: item.filmId,
         filmDetailsId: item.id
     }
     if(item.likeStatus === 0) {
-        item.likeStatus = 1
+        // item.likeStatus = 1
         request.post('/like-record-po/like', params).then((res: any) => {
             console.log(res)
+            getPlayInfo(item.id, index)
         })
     } else {
-        item.likeStatus = 0
+        // item.likeStatus = 0
         request.post('/like-record-po/unlike', params).then((res: any) => {
             console.log(res)
+            getPlayInfo(item.id, index)
         })
     }
 }
@@ -136,10 +145,14 @@ const getEpisodesList = () => {
         console.log('136', res)
         let data = res.data.content
         data.forEach((item: any) => {
-            item.playUrl = 'https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4'
+            item.playUrl = ''
             item.direction = 'Horizontal'
         });
         videoList.value = data
+        // 热播、最新进来的播放第一集
+        getPlayInfo(data[0].id, 0) // 详情
+        // banner进来的播放指定剧集
+        // getPlayInfo(data[index].id) // 详情
     })
 }
 // 展示剧集
@@ -149,12 +162,19 @@ const showEpisodes = () => {
     showFEpisodes.value.show = true
 }
 // 剧集详情/播放信息
-const getPlayInfo = (id: any) => {
+const getPlayInfo = (id: any, index: any) => {
+    console.log('154', id)
     let params = {
         filmDetailsId: id
     }
     request.post('/fnjc/filmDetails/getPlayInfo', params).then((res: any) => {
         console.log(res)
+        const data = res.data
+        videoList.value[index].collectStatus = data.collectStatus
+        videoList.value[index].likeStatus = data.likeStatus
+        // 切换后视频播放器需要一个loading
+        videoList.value[index].playUrl = 'https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4'
+        console.log('173', videoList)
     })
 }
 // getPlayInfo(1)
