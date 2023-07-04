@@ -1,12 +1,12 @@
 <template>
     <view class="my-video-player">
-        <!-- :current="1" -->
         <swiper
             class="swiper"
             :circular="true"
             :vertical="true"
             :autoplay="autoplay"
             :duration="duration"
+            :current="current"
             @change="changeplay"
             @touchstart="touchStart"
             @touchend="touchEnd"
@@ -40,13 +40,12 @@
                 <view class="episodes" @click="showEpisodes">选集 ></view>
             </swiper-item>
         </swiper>
-        <f-episodes ref="showFEpisodes" :list="videoList"></f-episodes>
+        <f-episodes ref="showFEpisodes" :list="videoList" @setPlayTheEpisodes="setPlayTheEpisodes"></f-episodes>
     </view>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
-import { useStore } from 'vuex'
+import { ref, nextTick } from 'vue'
 import request from '@/utils/request'
 import { onLoad } from '@dcloudio/uni-app'
 // 剧集id
@@ -56,50 +55,44 @@ onLoad((option: any)=>{
     filmId = option.filmId
     getEpisodesList()
 })
-// 购买
-// const getAmountInfoList = () => {
-//     request.post('/consumption/record/consumption',{}).then((res: any) => {
-//         console.log('93', res)
-//     })
-// }
-// getAmountInfoList()
 
 const videoErrorCallback = (e: any) => {
     console.log(e)
 }
 
 // 自动播放
+let current:any = ref(0)
 const autoplay: boolean = false
 // 滑动动画时长
-const duration: number = 300
+const duration: number = 0
 const changeplay = (res: any) => {
     console.log('34', res)
-    const detail = res.detail
-    if (touchStartPageY < touchEndPageY) {
-        console.log('向下滑动')
-        console.log('81', videoList.value[detail.current + 1].playUrl)
-        // videoList.value[detail.current + 1].playUrl = '' // 清空上一个视频
-        getPlayInfo(videoList.value[detail.current].id, detail.current)
-    } else {
-        console.log('向上滑动')
-        // videoList.value[detail.current - 1].playUrl = '' // 清空上一个视频
-        console.log('85', videoList.value[detail.current - 1].playUrl)
-        getPlayInfo(videoList.value[detail.current].id, detail.current)
+    const { detail } = res
+    if(detail.source === 'autoplay' || detail.source === 'touch'){
+        current.value = detail.current
+        if (touchStartPageY < touchEndPageY) {
+            console.log('向下滑动')
+            let index = detail.current === videoList.value.length - 1 ? -1 : detail.current
+            videoList.value[index + 1].playUrl = '' // 清空上一个视频
+            getPlayInfo(videoList.value[detail.current].id, detail.current)
+        } else {
+            console.log('向上滑动')
+            let index = detail.current === 0 ? videoList.value.length : detail.current
+            videoList.value[index - 1].playUrl = '' // 清空上一个视频
+            getPlayInfo(videoList.value[detail.current].id, detail.current)
+        }
     }
 }
 let touchStartPageY: number = 0
 const touchStart = (res: any) => {
-    // console.log('37', res)
     touchStartPageY = res.changedTouches[0].pageY
 }
 let touchEndPageY: number = 0
 const touchEnd = (res: any) => {
-    // console.log('40', res)
     touchEndPageY = res.changedTouches[0].pageY
 }
 // 点赞
 const onLike = (item: any, index: any) => {
-    console.log('139', item)
     let params = {
         filmId: item.filmId,
         filmDetailsId: item.id
@@ -144,9 +137,10 @@ const getEpisodesList = () => {
     request.post('/fnjc/filmDetails/getList', params).then((res: any) => {
         console.log('136', res)
         let data = res.data.content
-        data.forEach((item: any) => {
+        data.forEach((item: any, index: number) => {
             item.playUrl = ''
-            item.direction = 'Horizontal'
+            item.direction = 'vertical'
+            item.playIndex = index
         });
         videoList.value = data
         // 热播、最新进来的播放第一集
@@ -168,16 +162,21 @@ const getPlayInfo = (id: any, index: any) => {
         filmDetailsId: id
     }
     request.post('/fnjc/filmDetails/getPlayInfo', params).then((res: any) => {
-        console.log(res)
         const data = res.data
         videoList.value[index].collectStatus = data.collectStatus
         videoList.value[index].likeStatus = data.likeStatus
         // 切换后视频播放器需要一个loading
         videoList.value[index].playUrl = 'https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4'
-        console.log('173', videoList)
     })
 }
-// getPlayInfo(1)
+// 播放指定剧集
+const setPlayTheEpisodes = (item:any) => {
+    nextTick(()=>{
+        showFEpisodes.value.show = false
+        current.value = item.playIndex
+        getPlayInfo(item.id, item.playIndex) // 详情
+    })
+}
 
 </script>
 
@@ -193,6 +192,7 @@ const getPlayInfo = (id: any, index: any) => {
             align-items: center;
             justify-content: center;
             position: relative;
+            background: #000;
             .vertical {
                 width: 100%;
                 height: 100%;
