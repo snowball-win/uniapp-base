@@ -49,6 +49,7 @@
 </template>
 
 <script setup lang="ts">
+import request from '@/utils/request'
 import { ref, toRefs, defineEmits } from 'vue'
 let show = ref(false)
 const cancel = () => {
@@ -64,9 +65,9 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     list: '',
     filmDetail: {
-        filmName: '一人之下',
-        updateStatus: '已完结',
-        totalNum: '共100集'
+        filmName: '',
+        updateStatus: '',
+        totalNum: ''
     }
 })
 // banner 数据
@@ -74,9 +75,11 @@ const { list, filmDetail } = toRefs(props)
 // 播放指定剧集
 const alertDialog = ref()
 const emit = defineEmits(['setPlayTheEpisodes'])
+let itemDetail: any = {}
 const playTheEpisodes = (item: any) => {
     if(item.unLockStatus !== 1) { // 付费
         console.log('付费')
+        itemDetail = item
         alertDialog.value.open()
     } else { // 播放
         emit('setPlayTheEpisodes', item)
@@ -85,17 +88,26 @@ const playTheEpisodes = (item: any) => {
 // 弹窗提示购买
 const dialogConfirm = () => {
     console.log('购买')
+    buyTheEpisodes()
 }
 const dialogClose = () => {
     console.log('关闭')
 }
 
 // 购买
-// const getAmountInfoList = () => {
-//     request.post('/consumption/record/consumption',{}).then((res: any) => {
-//         console.log('93', res)
-//     })
-// }
+const buyTheEpisodes = () => {
+    request.post('/consumption/record/consumption',{filmDetailsId: itemDetail.id})
+    .then((res: any) => {
+        console.log('93', res)
+        if (res.code === '00-00-0000') {
+            emit('setPlayTheEpisodes', itemDetail)
+            uni.showToast({
+                title: `购买成功`,
+                icon: 'none'
+            })
+        }
+    })
+}
 
 </script>
 

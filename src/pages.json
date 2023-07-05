@@ -92,20 +92,20 @@
 		"list": [
 			{
 				"pagePath": "pages/theater/index",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
+				"iconPath": "static/tab-bar/tv01@2x.png",
+				"selectedIconPath": "static/tab-bar/tv02@2x.png",
 				"text": "剧场"
 			},
 			{
 				"pagePath": "pages/story/index",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
+				"iconPath": "static/tab-bar/pingpai@2x.png",
+				"selectedIconPath": "static/tab-bar/pingpai02@2x.png",
 				"text": "微故事"
 			},
 			{
 				"pagePath": "pages/my/index",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
+				"iconPath": "static/tab-bar/toux01@2x.png",
+				"selectedIconPath": "static/tab-bar/toux02@2x.png",
 				"text": "我的"
 			}
 		]

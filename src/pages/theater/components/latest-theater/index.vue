@@ -1,21 +1,22 @@
 <template>
-    <view class="theater-hot-therter">
-        <content-title title="最新剧场"></content-title>
-        <view class="hot-therter-content">
-            <div class="hot-therter-content__item" v-for="(item, index) in list" :key="index">
-                <div @click="toPlayPage(item)">
-                    <image :src="item.coverImg" alt="" class="theater-menu-bar__item__img" />
-                    <div>
-                        name
-                    </div>
-                </div>
-            </div>
+    <view class="theater-latest-therter">
+        <f-title title="最新剧场" :icon="imageTheater.zuixinjvchang"></f-title>
+        <view class="latest-content">
+            <view class="latest-content__item" v-for="(item, index) in list" :key="index" @click="toPlayPage(item)">
+                <view class="latest-content__item__img">
+                    <image :src="item.coverImg" alt="" />
+                </view>
+                <view class="latest-content__item__name">{{ item.name }}</view>
+                <view class="latest-content__item__info">{{ filtersUpdateStatus(item.updateStatus) }}共{{ item.totalNum }}集</view>
+            </view>
         </view>
     </view>
 </template>
 
 <script setup lang="ts">
 import { toRefs } from 'vue'
+import { imageTheater } from '@/image/index'
+import { filtersUpdateStatus } from '@/utils/dict'
 
 interface Props {
     list?: any
@@ -38,16 +39,38 @@ const toPlayPage = (item: any) => {
 </script>
 
 <style lang="scss">
-.theater-hot-therter {
-    background: #ccc;
+.theater-latest-therter {
     width: 100vw;
-    .hot-therter-content{
-        display: flex;
-        flex-wrap: wrap;
+    .latest-content{
+        padding: 0 30rpx;
+        display: grid;
+        grid-template-columns: 1fr 1fr; // 列
+        grid-column-gap: 30rpx; // 列间距
+        grid-row-gap: 50rpx; // 行间距
+        padding-bottom: 80rpx;
         &__item{
-            width: 50%;
             overflow: hidden;
-            flex-shrink: 0;
+            &__img{
+                overflow: hidden;
+                height: 510rpx;
+                margin-bottom: 26rpx;
+                border: 1px solid #e6e6e6;
+                border-radius: 18rpx;
+                image{
+                    width: 100%;
+                }
+            }
+            &__name{
+                font-size: 32rpx;
+                color: #333;
+                font-weight: blod;
+                margin-bottom: 12rpx;
+            }
+            &__info{
+                font-size: 24rpx;
+                font-weight: 400;
+                color: #666666;
+            }
         }
     }
 }

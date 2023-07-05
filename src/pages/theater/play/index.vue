@@ -40,7 +40,7 @@
                 <view class="episodes" @click="showEpisodes">选集 ></view>
             </swiper-item>
         </swiper>
-        <f-episodes ref="showFEpisodes" :list="videoList" @setPlayTheEpisodes="setPlayTheEpisodes"></f-episodes>
+        <f-episodes ref="showFEpisodes" :list="videoList" :filmDetail="filmDetail" @setPlayTheEpisodes="setPlayTheEpisodes"></f-episodes>
     </view>
 </template>
 
@@ -48,6 +48,8 @@
 import { ref, nextTick } from 'vue'
 import request from '@/utils/request'
 import { onLoad } from '@dcloudio/uni-app'
+import { filtersUpdateStatus } from '@/utils/dict'
+
 // 剧集id
 let filmId = ''
 onLoad((option: any)=>{
@@ -156,6 +158,7 @@ const showEpisodes = () => {
     showFEpisodes.value.show = true
 }
 // 剧集详情/播放信息
+let filmDetail: any = ref({})
 const getPlayInfo = (id: any, index: any) => {
     console.log('154', id)
     let params = {
@@ -167,6 +170,11 @@ const getPlayInfo = (id: any, index: any) => {
         videoList.value[index].likeStatus = data.likeStatus
         // 切换后视频播放器需要一个loading
         videoList.value[index].playUrl = 'https://img.cdn.aliyun.dcloud.net.cn/guide/uniapp/%E7%AC%AC1%E8%AE%B2%EF%BC%88uni-app%E4%BA%A7%E5%93%81%E4%BB%8B%E7%BB%8D%EF%BC%89-%20DCloud%E5%AE%98%E6%96%B9%E8%A7%86%E9%A2%91%E6%95%99%E7%A8%8B@20200317.mp4'
+        filmDetail = {
+            filmName: data.filmName,
+            updateStatus: filtersUpdateStatus(data.updateStatus),
+            totalNum: `共${data.totalNum}集`
+        }
     })
 }
 // 播放指定剧集
