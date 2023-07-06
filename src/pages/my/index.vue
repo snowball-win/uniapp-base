@@ -1,14 +1,20 @@
 <template>
   <view class="my">
     <div class="userInfo">
-      <!-- <div @click="login">登录</div> -->
-      <!-- <div @click="getUserInfo">获取用户信息</div> -->
-      <button  open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">去登录</button>
+      <view>
+        tx
+      </view>
+      <view class="userInfo__content">
+        <button class="userInfo__content__loginBtn" open-type="getPhoneNumber" @getphonenumber="getPhoneNumber">去登录</button>
+        <view>登录后更精彩</view>
+      </view>
       <view @click="setRecharge">充值</view>
     </div>
     <div class="list">
-      <div class="list__Item" v-for="(item, index) in list" :key="index" @click="toDetail(item, index)">
-        <view class="list__Item__img"></view>
+      <div class="list__Item" v-for="(item, index) in list" :key="index" @click="toDetail(item)">
+        <view class="list__Item__img">
+          <image :src="item.icon" alt="" class="story__list__item__img" />
+        </view>
         <view class="list__Item__text">{{ item.title }}</view>
         <view class="list__Item__arrow">></view>
       </div>
@@ -20,6 +26,8 @@
 <script setup lang="ts">
 import request from '@/utils/request'
 import {reactive, ref} from 'vue'
+import { imageMy } from '@/image/index'
+
 interface item {
     path?: string
     icon?: string
@@ -27,28 +35,28 @@ interface item {
 }
 const list: item[] = reactive([
   {
-    path: '',
-    icon: '',
+    path: 'watchRecords',
+    icon: imageMy.watchRecordes,
     title: '观看记录'
   },
   {
-    path: '',
-    icon: '',
+    path: 'likeRecords',
+    icon: imageMy.likeRecordes,
     title: '点赞记录'
   },
   {
-    path: '',
-    icon: '',
+    path: 'collectRecords',
+    icon: imageMy.collectRecordes,
     title: '收藏记录'
   },
   {
-    path: '',
-    icon: '',
+    path: 'rechargeRecords',
+    icon: imageMy.rechargeRecordes,
     title: '充值记录'
   },
   {
-    path: '',
-    icon: '',
+    path: 'consumptionRecords',
+    icon: imageMy.consumptionRecordes,
     title: '消费记录'
   },
 ])
@@ -102,42 +110,18 @@ const setRecharge = () => {
   console.log('95', showRecharge)
   showRecharge.value.show = true
 }
-// 消费记录
-const get111 = () => {
-    const params = {
-      page: 1,
-      pageSize: 10
-    }
-    request.post('/consumption/record/pageList',params).then((res: any) => {
-        console.log('93', res)
-    })
-}
-get111()
-// 充值记录
-const get222 = () => {
-    const params = {
-      page: 1,
-      pageSize: 10
-    }
-    request.post('/recharge/record/pageList',params).then((res: any) => {
-        console.log('93', res)
-    })
-}
-get222()
+
 // 用户信息
-const get333 = () => {
+const getUserInfoData = () => {
     request.post('/staff/v1/login/getUserInfo',{}).then((res: any) => {
         console.log('93', res)
     })
 }
-get333()
+getUserInfoData()
 // 去播放页面
-const toDetail = (item: any, index: any) => {
-    console.log('44', item, index)
-    console.log('45', item.filmId)
-    const pathArr = ['watchRecords', 'likeRecords', 'collectRecords', 'rechargeRecords', 'consumptionRecords']
+const toDetail = (item: any) => {
     uni.navigateTo({
-        url: `./details/${pathArr[index]}/index`
+        url: `./details/${item.path}/index`
     })
 }
 </script>
@@ -145,23 +129,47 @@ const toDetail = (item: any, index: any) => {
 <style lang="scss">
 .my {
   background-color: $bg-color;
+  .userInfo{
+    display: flex;
+    &__content{
+      &__loginBtn{
+        color: #333333;
+        height: 34rpx;
+        line-height: 34rpx;
+        font-weight: bold;
+        font-size: 34rpx;
+        margin: 0;
+        display: inline-block;
+        background: transparent;
+      }
+    }
+  }
   .list{
     &__Item{
       display: flex;
-      border: 1px solid #ccc;
       padding: 0 40rpx;
       height: 80rpx;
       margin-bottom: 48rpx;
       &__img{
         width: 80rpx;
         height: 80rpx;
-        border: 1px solid #ccc;
+        overflow: hidden;
+        border-radius: 50%;
+        margin-right: 24rpx;
+        image{
+          width: 100%;
+          height: 100%;
+        }
       }
       &__text{
         line-height: 80rpx;
+        color: #333333;
+        font-size: 34rpx;
+        flex: 1;
       }
       &__arrow{
         line-height: 80rpx;
+        width: 40rpx;
       }
     }
   }

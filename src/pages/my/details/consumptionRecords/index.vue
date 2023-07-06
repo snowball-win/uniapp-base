@@ -1,6 +1,6 @@
 <!-- 消费记录 -->
 <template>
-  <view class="my">
+  <view class="consumptionRecords">
     <scroll-view 
       scroll-y="true" 
       class="scroll-Y" 
@@ -12,12 +12,19 @@
       @refresherabort="onAbort"
     >
       <div class="list">
-        <div class="list__Item" v-for="(item, index) in 20" :key="index">
-          <view class="list__Item__img"></view>
-          <view class="list__Item__text">{{ item }}</view>
-          <view class="list__Item__arrow">></view>
+        <div class="list__Item" v-for="(item, index) in list" :key="index">
+          <view class="list__Item__text">
+            <view class="list__Item__text__name">{{ item.mainName }}-{{ item.detailsName }}</view>
+            <view class="list__Item__text__time">支付时间：{{ item.updateTime }}</view>
+          </view>
+          <view class="list__Item__niuAmount">-{{ item.niuAmount }}牛币</view>
         </div>
-        <div>到底部了</div>
+        <uni-load-more
+          iconType="auto"
+          :status="refresherFlag?'more':'noMore'"
+          :content-text="refresherFlag?'上拉加载更多':'没有跟多数据了'"
+        >
+        </uni-load-more>
       </div>
     </scroll-view>
   </view>
@@ -25,123 +32,47 @@
 
 <script setup lang="ts">
 import request from '@/utils/request'
-import {reactive, ref} from 'vue'
-interface item {
-    path?: string
-    icon?: string
-    title?: string
-}
-const list: item[] = reactive([
-  {
-    path: '',
-    icon: '',
-    title: '观看记录'
-  },
-  {
-    path: '',
-    icon: '',
-    title: '收藏记录'
-  },
-  {
-    path: '',
-    icon: '',
-    title: '充值记录'
-  },
-  {
-    path: '',
-    icon: '',
-    title: '消费记录'
-  },
-])
-// 设置登录
-let params = {
-  code: '',
-  phoneCode: '',
-  userName: '',
-  avatarUrl: '',
-  gender: 0
-}
-const login = () => {
-  console.log('login')
-  wx.login({
-    success (res) {
-      if (res.code) {
-        params.code = res.code
-        getUserInfo()
-      } else {
-        console.log('登录失败！' + res.errMsg)
-      }
-    }
-  })
-}
-const getUserInfo = () => {
-  wx.getUserInfo({
-    success: function(res) {
-      console.log('25', res)
-      params.userName = res.userInfo.nickName
-      params.avatarUrl = res.userInfo.avatarUrl
-      params.gender = res.userInfo.gender
-      console.log('78params', params)
-      wx.setStorageSync('userName', res.userInfo.nickName || '')
-      wx.setStorageSync('avatarUrl', res.userInfo.avatarUrl || '')
-      wx.setStorageSync('gender', String(res.userInfo.gender))
-      setLogin(params)
-    }
-  })
-}
-const getPhoneNumber = (e: any) => {
-  login()
-  params.phoneCode = e.detail.code
-}
-const setLogin = (params = {}) => {
-    request.post('/staff/v1/login/loginOrRegisterByWx',params).then((res: any) => {
-        wx.setStorageSync('token', res.data.token || '')
-    })
-}
-const showRecharge:any = ref(null);
-const setRecharge = () => {
-  console.log('95', showRecharge)
-  showRecharge.value.show = true
-}
+import {ref} from 'vue'
+
 // 消费记录
-const get111 = () => {
+let list: any = ref([])
+let page: any = ref(1)
+let refresherFlag: any = ref(true) // true 允许加载，false 不允许加载
+const gitConsumptionRecords = () => {
     const params = {
-      page: 1,
+      page: page.value,
       pageSize: 10
     }
     request.post('/consumption/record/pageList',params).then((res: any) => {
+        if(res.code === '00-00-0000') {
+          list.value = res.data.content
+          triggered.value = false
+          if((res.data.totalElements < 10) && ((res.data.number * res.data.size) >= res.data.totalElements)) { // 上拉可以加载更多
+            console.log('49')
+            refresherFlag.value = false
+          }
+        }
         console.log('93', res)
     })
 }
-get111()
-// 充值记录
-const get222 = () => {
-    const params = {
-      page: 1,
-      pageSize: 10
-    }
-    request.post('/recharge/record/pageList',params).then((res: any) => {
-        console.log('93', res)
-    })
-}
-get222()
-// 用户信息
-const get333 = () => {
-    request.post('/staff/v1/login/getUserInfo',{}).then((res: any) => {
-        console.log('93', res)
-    })
-}
-get333()
+gitConsumptionRecords()
+
 // 滚动到底部
 const lower = () => {
 	console.log('滚动到底部')
+  if(refresherFlag.value){
+    page.value += 1
+    gitConsumptionRecords()
+  }
 }
-let triggered = false
+let triggered = ref(false)
 // 下拉刷新
 const refresher = () => {
 	console.log('下拉刷新')
-  // triggered = true
-  triggered = false
+  page.value = 1
+  gitConsumptionRecords()
+  refresherFlag.value = true
+  triggered.value = true
 }
 // 自定义下拉刷新被复位
 const onRestore = () => {
@@ -154,26 +85,36 @@ const onAbort = () => {
 </script>
 
 <style lang="scss">
-.my {
-  background-color: $bg-color;
+.consumptionRecords {
+  background-color: #F6F6F6;
   .list{
-    height: 500px;
+    height: 100vh;
+    padding: 30rpx 30rpx 0 30rpx;
     &__Item{
       display: flex;
-      border: 1px solid #ccc;
-      padding: 0 40rpx;
-      height: 80rpx;
-      margin-bottom: 48rpx;
-      &__img{
-        width: 80rpx;
-        height: 80rpx;
-        border: 1px solid #ccc;
-      }
+      padding: 0 30rpx;
+      height: 150rpx;
+      margin-bottom: 30rpx;
+      background: #fff;
+      align-items: center;
+      justify-content: space-between;
       &__text{
-        line-height: 80rpx;
+        &__name{
+          font-size: 34rpx;
+          color: #333;
+          font-weight: bold;
+          margin-bottom: 14rpx;
+        }
+        &__time{
+          font-size: 28rpx;
+          font-weight: 400;
+          color: #333333;
+        }
       }
-      &__arrow{
-        line-height: 80rpx;
+      &__niuAmount{
+        color: #333;
+        font-size: 34rpx;
+        font-weight: bold;
       }
     }
   }
