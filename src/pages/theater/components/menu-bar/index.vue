@@ -51,6 +51,7 @@ const toDetail = (item: any): void => {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        border-radius: 18rpx;
         &__img {
             width: 76rpx;
             height: 65rpx;
